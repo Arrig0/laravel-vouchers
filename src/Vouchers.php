@@ -45,14 +45,14 @@ class Vouchers
      * @param null $expires_at
      * @return array
      */
-    public function create(Model $model, int $amount = 1, array $data = [], $expires_at = null)
+    public function create(?Model $model, int $amount = 1, array $data = [], $expires_at = null)
     {
         $vouchers = [];
 
         foreach ($this->generate($amount) as $voucherCode) {
             $vouchers[] = $this->voucherModel->create([
-                'model_id' => $model->getKey(),
-                'model_type' => $model->getMorphClass(),
+                'model_id'     => ($model instanceof Model) ? $model->getKey() : null, 
+                'model_type'   => ($model instanceof Model) ? $model->getMorphClass() : null,
                 'code' => $voucherCode,
                 'data' => $data,
                 'expires_at' => $expires_at,
